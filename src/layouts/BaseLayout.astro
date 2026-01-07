@@ -1,0 +1,51 @@
+---
+import "../styles/global.css";
+
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const { title, description = "A minimal brutalist blog" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="description" content={description} />
+        <title>{title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <header
+            style="border-bottom: 8px solid black; margin-bottom: 3rem; padding-bottom: 1rem;"
+        >
+            <nav>
+                <h1 style="margin: 0;">
+                    <a href="/" style="border: none;">BRUTAL BLOG</a>
+                </h1>
+                <div style="margin-top: 1rem; display: flex; gap: 1.5rem;">
+                    <a href="/">HOME</a>
+                    <a href="/about">ABOUT</a>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <slot />
+        </main>
+        <footer
+            style="margin-top: 5rem; border-top: 4px solid black; padding-top: 2rem; font-weight: bold;"
+        >
+            &copy; {new Date().getFullYear()} BRUTALIST CORP. NO RIGHTS RESERVED.
+        </footer>
+    </body>
+</html>

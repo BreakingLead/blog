@@ -1,0 +1,23 @@
+---
+const { post } = Astro.props;
+const { title, description, pubDate } = post.data;
+---
+
+<article class="brutalist-card">
+    <time datetime={pubDate.toISOString()}>
+        {
+            pubDate.toLocaleDateString("en-us", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            })
+        }
+    </time>
+    <h2 style="margin: 1rem 0;"><a href={`/blog/${post.slug}`}>{title}</a></h2>
+    <p style="margin-bottom: 1.5rem;">{description}</p>
+    <a
+        href={`/blog/${post.slug}`}
+        class="brutalist-button"
+        style="text-decoration: none;">READ MORE</a
+    >
+</article>

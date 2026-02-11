@@ -2,50 +2,109 @@
 import "../styles/global.css";
 
 interface Props {
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 }
 
 const { title, description = "A minimal brutalist blog" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-        <meta name="description" content={description} />
-        <title>{title}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-            rel="stylesheet"
-        />
-    </head>
-    <body>
-        <header
-            style="border-bottom: 8px solid black; margin-bottom: 3rem; padding-bottom: 1rem;"
-        >
-            <nav>
-                <h1 style="margin: 0;">
-                    <a href="/" style="border: none;">BRUTAL BLOG</a>
-                </h1>
-                <div style="margin-top: 1rem; display: flex; gap: 1.5rem;">
-                    <a href="/">HOME</a>
-                    <a href="/about">ABOUT</a>
-                </div>
-            </nav>
-        </header>
-        <main>
-            <slot />
-        </main>
-        <footer
-            style="margin-top: 5rem; border-top: 4px solid black; padding-top: 2rem; font-weight: bold;"
-        >
-            &copy; {new Date().getFullYear()} BRUTALIST CORP. NO RIGHTS RESERVED.
-        </footer>
-    </body>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <script>
+      // Initialize theme on page load
+      function initTheme() {
+        const html = document.documentElement;
+        const stored = localStorage.getItem("theme");
+        const isDark = stored
+          ? stored === "dark"
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (isDark) {
+          html.classList.add("dark");
+        } else {
+          html.classList.remove("dark");
+        }
+      }
+      initTheme();
+    </script>
+  </head>
+  <body
+    class="bg-white dark:bg-[#1a1a1a] text-black dark:text-white font-mono leading-relaxed p-8 max-w-4xl mx-auto transition-colors duration-300 md:p-4"
+  >
+    <header class="border-b-8 border-black dark:border-white pb-4 mb-12">
+      <nav>
+        <div class="flex justify-between items-center">
+          <h1
+            class="m-0 uppercase font-black mb-4 leading-tight text-6xl md:text-3xl"
+          >
+            <a
+              href="/"
+              class="border-0 border-b-2 border-black dark:border-white transition-all duration-200 hover:bg-fuchsia-500 hover:text-white hover:border-b-transparent"
+              >BRUTAL BLOG</a
+            >
+          </h1>
+          <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </div>
+        <div class="mt-4 flex gap-6">
+          <a
+            href="/"
+            class="border-b-2 border-black dark:border-white transition-all duration-200 hover:bg-fuchsia-500 hover:text-white hover:border-b-transparent"
+            >HOME</a
+          >
+          <a
+            href="/about"
+            class="border-b-2 border-black dark:border-white transition-all duration-200 hover:bg-fuchsia-500 hover:text-white hover:border-b-transparent"
+            >ABOUT</a
+          >
+        </div>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer
+      class="border-t-4 border-black dark:border-white pt-8 mt-20 font-bold"
+    >
+      &copy; {new Date().getFullYear()} 破碎铅秋。
+    </footer>
+
+    <script>
+      function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        updateThemeButton();
+      }
+
+      function updateThemeButton() {
+        const button = document.getElementById("theme-toggle");
+        if (button) {
+          const isDark = document.documentElement.classList.contains("dark");
+          button.textContent = isDark ? "☀️" : "🌙";
+        }
+      }
+
+      function setupThemeToggle() {
+        const themeToggle = document.getElementById("theme-toggle");
+        if (themeToggle) {
+          themeToggle.addEventListener("click", toggleTheme);
+          updateThemeButton();
+        }
+      }
+
+      // Setup immediately if DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", setupThemeToggle);
+      } else {
+        setupThemeToggle();
+      }
+    </script>
+  </body>
 </html>
